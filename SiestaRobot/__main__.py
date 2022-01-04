@@ -407,32 +407,36 @@ def siesta_about_callback(update, context):
 
     elif query.data == "siesta_admin":
         query.message.edit_text(
-            text=f"*๏ Let's make your group bit effective now*"
-            "\nCongragulations, Siesta Robot now ready to manage your group."
-            "\n\n*Admin Tools*"
-            "\nBasic Admin tools help you to protect and powerup your group."
-            "\nYou can ban members, Kick members, Promote someone as admin through commands of bot."
-            "\n\n*Greetings*"
-            "\nLets set a welcome message to welcome new users coming to your group."
-            "\nsend `/setwelcome [message]` to set a welcome message!",
+            text="*๏ Let's make your group bit effective now*\nCongragulations, Siesta Robot now ready to manage your group.\n\n*Admin Tools*\nBasic Admin tools help you to protect and powerup your group.\nYou can ban members, Kick members, Promote someone as admin through commands of bot.\n\n*Greetings*\nLets set a welcome message to welcome new users coming to your group.\nsend `/setwelcome [message]` to set a welcome message!",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="Go Back", callback_data="siesta_")]]
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Go Back", callback_data="siesta_"
+                        )
+                    ]
+                ]
             ),
         )
 
+
     elif query.data == "siesta_notes":
         query.message.edit_text(
-            text=f"<b>๏ Setting up notes</b>"
-            f"\nYou can save message/media/audio or anything as notes"
-            f"\nto get a note simply use # at the beginning of a word"
-            f"\n\nYou can also set buttons for notes and filters (refer help menu)",
+            text='<b>๏ Setting up notes</b>\nYou can save message/media/audio or anything as notes\nto get a note simply use # at the beginning of a word\n\nYou can also set buttons for notes and filters (refer help menu)',
             parse_mode=ParseMode.HTML,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="Go Back", callback_data="siesta_")]]
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Go Back", callback_data="siesta_"
+                        )
+                    ]
+                ]
             ),
         )
+
     elif query.data == "siesta_support":
         query.message.edit_text(
             text="*๏ Siesta support chats*"
@@ -446,7 +450,7 @@ def siesta_about_callback(update, context):
                  ],
                  [
                     InlineKeyboardButton(text="Go Back", callback_data="siesta_"),
-                 
+
                  ]
                 ]
             ),
@@ -455,22 +459,33 @@ def siesta_about_callback(update, context):
 
     elif query.data == "siesta_credit":
         query.message.edit_text(
-            text=f"๏ Credis for Siesta\n"
-            "\nHere Developers Making And Give Inspiration For Made The Siesta Robot",
+            text='๏ Credis for Siesta\n\nHere Developers Making And Give Inspiration For Made The Siesta Robot',
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(
                 [
-                 [
-                    InlineKeyboardButton(text="Vain", url="https://github.com/shiinobu"),
-                    InlineKeyboardButton(text="Sena-Ex", url="https://github.com/kennedy-ex"),
-                 ],
-                 [
-                    InlineKeyboardButton(text="Paul Larsen", url="https://github.com/PaulSonOfLars"),
-                    InlineKeyboardButton(text="TheHamkerCat", url="https://github.com/TheHamkerCat"),
-                 ],
-                 [
-                    InlineKeyboardButton(text="Go Back", callback_data="siesta_"),
-                 ]
+                    [
+                        InlineKeyboardButton(
+                            text="Vain", url="https://github.com/shiinobu"
+                        ),
+                        InlineKeyboardButton(
+                            text="Sena-Ex", url="https://github.com/kennedy-ex"
+                        ),
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Paul Larsen",
+                            url="https://github.com/PaulSonOfLars",
+                        ),
+                        InlineKeyboardButton(
+                            text="TheHamkerCat",
+                            url="https://github.com/TheHamkerCat",
+                        ),
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Go Back", callback_data="siesta_"
+                        ),
+                    ],
                 ]
             ),
         )
@@ -593,25 +608,24 @@ def send_settings(chat_id, user_id, user=False):
                 parse_mode=ParseMode.MARKDOWN,
             )
 
+    elif CHAT_SETTINGS:
+        chat_name = dispatcher.bot.getChat(chat_id).title
+        dispatcher.bot.send_message(
+            user_id,
+            text="Which module would you like to check {}'s settings for?".format(
+                chat_name
+            ),
+            reply_markup=InlineKeyboardMarkup(
+                paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
+            ),
+        )
     else:
-        if CHAT_SETTINGS:
-            chat_name = dispatcher.bot.getChat(chat_id).title
-            dispatcher.bot.send_message(
-                user_id,
-                text="Which module would you like to check {}'s settings for?".format(
-                    chat_name
-                ),
-                reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
-                ),
-            )
-        else:
-            dispatcher.bot.send_message(
-                user_id,
-                "Seems like there aren't any chat settings available :'(\nSend this "
-                "in a group chat you're admin in to find its current settings!",
-                parse_mode=ParseMode.MARKDOWN,
-            )
+        dispatcher.bot.send_message(
+            user_id,
+            "Seems like there aren't any chat settings available :'(\nSend this "
+            "in a group chat you're admin in to find its current settings!",
+            parse_mode=ParseMode.MARKDOWN,
+        )
 
 
 def settings_button(update: Update, context: CallbackContext):
@@ -703,29 +717,28 @@ def get_settings(update: Update, context: CallbackContext):
     msg = update.effective_message  # type: Optional[Message]
 
     # ONLY send settings in PM
-    if chat.type != chat.PRIVATE:
-        if is_user_admin(chat, user.id):
-            text = "Click here to get this chat's settings, as well as yours."
-            msg.reply_text(
-                text,
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="Settings",
-                                url="t.me/{}?start=stngs_{}".format(
-                                    context.bot.username, chat.id
-                                ),
-                            )
-                        ]
-                    ]
-                ),
-            )
-        else:
-            text = "Click here to check your settings."
-
-    else:
+    if chat.type == chat.PRIVATE:
         send_settings(chat.id, user.id, True)
+
+    elif is_user_admin(chat, user.id):
+        text = "Click here to get this chat's settings, as well as yours."
+        msg.reply_text(
+            text,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="Settings",
+                            url="t.me/{}?start=stngs_{}".format(
+                                context.bot.username, chat.id
+                            ),
+                        )
+                    ]
+                ]
+            ),
+        )
+    else:
+        text = "Click here to check your settings."
 
 
 def donate(update: Update, context: CallbackContext):
