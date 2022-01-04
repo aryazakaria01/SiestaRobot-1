@@ -54,10 +54,10 @@ async def bug(cln: Client, msg: Message):
                 msg=bug_report,
                 disable_web_page_preview=True,
             )
-            await msg.reply_text(f"The bug was successfully reported to the support group")
+            await msg.reply_text('The bug was successfully reported to the support group')
         except BadRequest:
-            await msg.reply_text(f"The bug was failed reported to the support group")
+            await msg.reply_text('The bug was failed reported to the support group')
     else:
-        await msg.reply(f"No bug to report")
+        await msg.reply('No bug to report')
 
 __mod_name__ = "Bug"
